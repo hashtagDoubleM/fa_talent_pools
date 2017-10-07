@@ -1,0 +1,138 @@
+---
+title: "Financial Advisor Talent Pools [DRAFT]"
+author: 
+- "Jacob Fischer, Branch Insights"
+- "Matthew Milunski, Talent Management"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::html_clean:
+    highlight: kate
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=FALSE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=FALSE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+```
+
+```{r, echo=F, include=F, comment=NA}
+# load packages ----
+lapply(c("tidyverse", "data.table", "plotly"), function(package.name) {
+    if (!is.element(package.name, installed.packages()[, 1])) {
+    show(paste0("installing...", package.name))
+    install.packages(package.name, dependencies = TRUE)
+    library(package.name, character.only = TRUE)
+    } else {
+    library(package.name, character.only = TRUE)
+    }
+})
+
+# load data ----
+ksa <- fread(paste0(getwd(), "/ksa_df.csv"), header = TRUE, 
+             stringsAsFactors = FALSE)
+```
+
+## Background
+[PROVIDE SOME BACKGROUND]
+
+## The Data
+The Occupational Information Network known as [O*NET](https://www.onetcenter.org) stores various data on occupational definitions that helps people understand the United States' workforce. Select data categories from O*NET were used for analysis:
+
+- Knowledge
+- Skills
+- Abilities
+- Work Values
+- Work Styles
+- Interests
+
+The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. None of the variables were weighted for importance in this analysis.
+
+## K-Means
+```{r}
+# k-means with 75 clusters ----
+ksa_scaled_vars <- ksa %>%
+    ## select for only the KSAs, etc
+    select_if(is.numeric) %>%
+    ## scale data
+    mutate_all(scale)
+set.seed(100)
+kmeans_fit <- kmeans(ksa_scaled_vars, 75)
+ksa_complete <- bind_cols(ksa,
+                          data.frame(assigned_cluster = kmeans_fit$cluster))
+
+# get cluster value that FAs belong to ----
+fa_cluster_value <-
+    ksa_complete$assigned_cluster[ksa_complete$title == "Personal Financial Advisors"]
+similar_fa_jobs <- ksa_complete %>%
+    filter(assigned_cluster == fa_cluster_value)
+
+# make table ----
+similar_df <- similar_fa_jobs %>%
+    select(o_net_soc_code, Occupation = title) %>%
+    filter(Occupation != "Personal Financial Advisors")
+similar_df %>%
+    knitr::kable("html", caption = "Jobs Related to Financial Advisors")
+```
+K-means clustering yielded `r nrow(similar_df)` occupations based on the previously mentioned categories.  
+
+## Occupations Closest to Financial Advisor
+From the previous cluster solution, the distances were calculated within that cluster in order to find which jobs were most similar to the Financial Advisor. Those with a "Similarity to FA" value closest to zero are more like the financial advisor in their roles.
+```{r}
+# create dataframe from `similar_fa_jobs` cluster and rescale ----
+fa_jobs_scaled <- similar_fa_jobs %>%
+    select(administration_and_management:social) %>%
+    mutate_all(scale)
+
+# create matrix of distances and attach to `similar_fa_jobs`----
+e_dist <- as.matrix(dist(fa_jobs_scaled))
+similar_fa_jobs2 <- data.frame(similar_fa_jobs,
+                               euclidean_dist = e_dist[, 10]) %>%
+    select(o_net_soc_code, title, euclidean_dist) %>%
+    arrange(euclidean_dist)
+
+# make a table ----
+similar_fa_jobs2 %>% select(Occupation = title,
+                            `Similarity to FA` = euclidean_dist) %>%
+    knitr::kable("html", title = "Occupations Ranked as Most Similar to Financial Advisors")
+```
+
+```{r all jobs, include=F}
+# all jobs ----
+onet.dist <- function(data, job_title) {
+    ## get KSAs, etc from data
+    all_jobs <- data[, 4:ncol(data)]
+    ## scale, create distance matrix, and format as matrix
+    scaled_dist <- as.matrix(dist(scale(all_jobs)))
+    ## join job title and other info to matrix
+    dist_df <- data.frame(data[, 1:3], scaled_dist)
+    ## find column index that has zero distance relative to the job_title
+    equals_zero <-
+        as.data.frame(which(dist_df == 0, arr.ind = TRUE))
+    row_ref <- which(dist_df$title == job_title)
+    col_ref <- equals_zero$col[row_ref]
+    ## return basic job info and associated distances
+    all_jobs2 <- subset(dist_df,
+                        select = c(o_net_soc_code, title, description,
+                                   col_ref))
+    return(all_jobs2)
+}
+onet.dist(ksa, "Personal Financial Advisors")
+```
+
+## Jobs when weighting certain relationship-based variables
+
+## Recommendations
+[LIST RECOMMENDATIONS]
+
+
