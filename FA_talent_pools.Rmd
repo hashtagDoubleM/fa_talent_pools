@@ -125,12 +125,14 @@ onet.dist <- function(data, job_title) {
     all_jobs2 <- subset(dist_df,
                         select = c(o_net_soc_code, title, description,
                                    col_ref))
+    all_jobs2 <- all_jobs2[order(all_jobs2[, 4]), ]
     return(all_jobs2)
 }
 onet.dist(ksa, "Personal Financial Advisors")
 ```
 
-## Jobs when weighting certain relationship-based variables
+### Plotting the distances
+
 
 ## Recommendations
 [LIST RECOMMENDATIONS]
