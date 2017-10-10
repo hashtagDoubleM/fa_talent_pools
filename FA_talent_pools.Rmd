@@ -134,7 +134,7 @@ onet.dist(ksa, "Personal Financial Advisors")
 ```
 
 ## Weighting More Interpersonal Skill Variables
-The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.
+The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.  
 ```{r soft skill weights}
 
 
