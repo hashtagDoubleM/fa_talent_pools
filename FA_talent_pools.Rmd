@@ -25,7 +25,7 @@ opts_knit$set(width=75)
 
 ```{r, echo=F, include=F, comment=NA}
 # load packages ----
-lapply(c("tidyverse", "data.table", "plotly"), function(package.name) {
+lapply(c("tidyverse", "plotly"), function(package.name) {
     if (!is.element(package.name, installed.packages()[, 1])) {
     show(paste0("installing...", package.name))
     install.packages(package.name, dependencies = TRUE)
@@ -36,8 +36,8 @@ lapply(c("tidyverse", "data.table", "plotly"), function(package.name) {
 })
 
 # load data ----
-ksa <- fread(paste0(getwd(), "/ksa_df.csv"), header = TRUE, 
-             stringsAsFactors = FALSE)
+ksa <- read.csv(paste0(getwd(), "/ksa_df.csv"), header = TRUE, 
+                stringsAsFactors = FALSE)
 ```
 
 ## Background
@@ -54,6 +54,8 @@ O\*NET stores various data on occupational definitions that helps people underst
 - Interests
 
 The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. 
+
+[INCLUDE DATA HANDLING PROCEDURES]
 
 ## K-Means
 ```{r}
@@ -130,12 +132,37 @@ onet.dist <- function(data, job_title, show_topn = 5) {
     top_jobs <- all_jobs2[1:show_topn, ]
     return(top_jobs)
 }
-onet.dist(ksa, "Personal Financial Advisors")
+onet.dist(ksa, "Personal Financial Advisors", 20)
 ```
 
 ## Weighting More Interpersonal Skill Variables
 The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.  
+
+Viable interpersonal skills to weight are `relationships`, `concern_for_others`,
+`social_orientation`, and `social`. Inititally, these variables were weighted by a factor of 2, but little to no differentiation was observed from previous results. A second pass was made by multiplying these variables by a factor of 10. This seemed to create a list that removed more analyst-based roles and used roles with greater "people skill" involvement.
 ```{r soft skill weights}
+# scale data ----
+scaled <- ksa %>% 
+    mutate_at(vars(administration_and_management:ncol(.)), scale) 
 
+# weight the variables by a factor of 10 ----
+scaled_vars <- c("relationships", "concern_for_others", 
+                "social_orientation", "social")
+scaled[, scaled_vars] <- lapply(scaled[, scaled_vars], function(x) {
+    ifelse(scaled$o_net_soc_code == "13-2052.00", x * 10, x)
+})
 
+# redo the distances ----
+weighted_distances <- scaled %>% 
+    select(administration_and_management:ncol(.)) %>% 
+    dist() %>% 
+    as.matrix %>%
+    data.frame(select(scaled, o_net_soc_code:description), .)
+
+# get the 
+weighted_distances %>% 
+    select(title, X96) %>% 
+    arrange(X96) %>% 
+    top_n(-20, X96) %>% 
+    knitr::kable("html", title = "Occupations Similar to FA Weighted for Interpersonal Skills")
 ```

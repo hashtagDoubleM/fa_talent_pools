@@ -85,6 +85,7 @@ img {
 <li>Interests</li>
 </ul>
 <p>The resulting dataset contained 962 occupations and 151 variables.</p>
+<p>[INCLUDE DATA HANDLING PROCEDURES]</p>
 </div>
 <div id="k-means" class="section level2">
 <h2>K-Means</h2>
@@ -488,6 +489,15 @@ Insurance Adjusters, Examiners, and Investigators
 <div id="weighting-more-interpersonal-skill-variables" class="section level2">
 <h2>Weighting More Interpersonal Skill Variables</h2>
 <p>The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.</p>
+<div id="weighted.jobs-function" class="section level3">
+<h3><code>weighted.jobs</code> function</h3>
+<p>The function <code>weighted.jobs</code> is designed to return a dataframe consisting of O*NET SOC Codes, job titles, and the distances from the job specified in the <code>job_title</code> argument. The function takes four arguments:</p>
+<ul>
+<li><code>dataset</code>: a dataframe of</li>
+<li><code>job_title</code>: a character vector of the job title in the dataframe</li>
+<li><code>wgts.vars</code>:</li>
+</ul>
+</div>
 </div>
 </div>
 
