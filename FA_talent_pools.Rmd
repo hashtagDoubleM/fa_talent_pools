@@ -149,7 +149,7 @@ scaled <- ksa %>%
 scaled_vars <- c("relationships", "concern_for_others", 
                 "social_orientation", "social")
 scaled[, scaled_vars] <- lapply(scaled[, scaled_vars], function(x) {
-    ifelse(scaled$o_net_soc_code == "13-2052.00", x * 10, x)
+    ifelse(scaled$o_net_soc_code == "13-2052.00", x * 5, x)
 })
 
 # redo the distances ----
@@ -161,8 +161,8 @@ weighted_distances <- scaled %>%
 
 # get the 
 weighted_distances %>% 
-    select(title, X96) %>% 
-    arrange(X96) %>% 
-    top_n(-20, X96) %>% 
+    select(title, distance = X96) %>% 
+    arrange(distance) %>% 
+    top_n(-20, distance) %>% 
     knitr::kable("html", title = "Occupations Similar to FA Weighted for Interpersonal Skills")
 ```
