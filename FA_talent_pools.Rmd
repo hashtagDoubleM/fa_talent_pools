@@ -1,7 +1,7 @@
 ---
 title: "Financial Advisor Talent Pools"
 date: "`r Sys.Date()`"
-output:
+output: 
   rmdformats::html_clean:
     highlight: kate
 ---
@@ -53,9 +53,7 @@ O\*NET stores various data on occupational definitions that helps people underst
 - Work Styles
 - Interests
 
-The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. 
-
-[INCLUDE DATA HANDLING PROCEDURES]
+The data used in this analysis were the importance measures for each occupation. Furthermore, only observations that were not *recommended for suppression* were used (refer to page 1 in *Data Dictionary O\*NET 22.0 Database* manual). Observations with missing data were removed from the dataset. The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. 
 
 ## K-Means
 ```{r}
@@ -138,8 +136,19 @@ onet.dist(ksa, "Personal Financial Advisors", 20)
 ## Weighting More Interpersonal Skill Variables
 The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.  
 
-Viable interpersonal skills to weight are `relationships`, `concern_for_others`,
-`social_orientation`, and `social`. Inititally, these variables were weighted by a factor of 2, but little to no differentiation was observed from previous results. A second pass was made by multiplying these variables by a factor of 10. This seemed to create a list that removed more analyst-based roles and used roles with greater "people skill" involvement.
+Nine different qualities were selected for weighting based upon researcher knowledge of the company-specific FA role:  
+
+- Relationships
+- Concern for others
+- Social orientation
+- Social
+- Persuasion
+- Active listening
+- Service orientation
+- Sales and marketing
+- Customer and personal service  
+
+The above qualities were weighted by a factor of two (2). This seemed to create a list that removed more analyst-based roles and used roles with greater "people skill" involvement.
 ```{r soft skill weights}
 # scale data ----
 scaled <- ksa %>% 
@@ -147,9 +156,11 @@ scaled <- ksa %>%
 
 # weight the variables by a factor of 10 ----
 scaled_vars <- c("relationships", "concern_for_others", 
-                "social_orientation", "social")
+                "social_orientation", "social", "persuasion",
+                "active_listening", "service_orientation",
+                "sales_and_marketing", "customer_and_personal_service")
 scaled[, scaled_vars] <- lapply(scaled[, scaled_vars], function(x) {
-    ifelse(scaled$o_net_soc_code == "13-2052.00", x * 5, x)
+    ifelse(scaled$o_net_soc_code == "13-2052.00", x * 2, x)
 })
 
 # redo the distances ----
@@ -159,10 +170,19 @@ weighted_distances <- scaled %>%
     as.matrix %>%
     data.frame(select(scaled, o_net_soc_code:description), .)
 
-# get the 
-weighted_distances %>% 
-    select(title, distance = X96) %>% 
+# get the table ----
+weighted_tbl <- weighted_distances %>% 
+    select(o_net_soc_code, title, distance = X96) %>% 
     arrange(distance) %>% 
-    top_n(-20, distance) %>% 
+    top_n(-20, distance) 
+
+weighted_tbl %>% 
     knitr::kable("html", title = "Occupations Similar to FA Weighted for Interpersonal Skills")
 ```
+
+## Conclusion
+This analysis provided potential occupations similar to financial advisors through finding commonalities in knowledge, skills, abilities, work values, work styles, and interests. K-means clustering, unweighted euclidean distances, and weighted euclidean distances were used to find similar occupations. The weighted distance analysis was selected for stakeholder presentation as the occupations overlapped with prior information while providing novel occupations to consider. Future research should test the validity of these selected jobs in predicting FA performance.  
+
+
+
+

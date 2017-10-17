@@ -92,6 +92,13 @@ interests2 <- interests_ %>%
     select(o_net_soc_code, element_name, data_value) %>%
     spread(key = element_name, value = data_value) %>%
     clean.names()
+## work activities
+# work_activities2 <- work_activities_ %>% 
+#     filter(recommend_suppress %in% c("N", NA),
+#            scale_id == "IM") %>% 
+#     select(o_net_soc_code, element_name, data_value) %>% 
+#     spread(key = element_name, value = data_value) %>% 
+#     clean.names()
 ## create single KSA dataframe
 ksa_df <- occupation_data_ %>%
     left_join(knowledge2, by = "o_net_soc_code") %>%

@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2017-10-10" />
+<meta name="date" content="2017-10-17" />
 
 <title>Financial Advisor Talent Pools</title>
 
@@ -65,7 +65,7 @@ img {
 
 <div id="header">
 <h1 class="title">Financial Advisor Talent Pools</h1>
-<h4 class="date"><em>2017-10-10</em></h4>
+<h4 class="date"><em>2017-10-17</em></h4>
 </div>
 
 <div id="content">
@@ -84,8 +84,7 @@ img {
 <li>Work Styles</li>
 <li>Interests</li>
 </ul>
-<p>The resulting dataset contained 962 occupations and 151 variables.</p>
-<p>[INCLUDE DATA HANDLING PROCEDURES]</p>
+<p>The data used in this analysis were the importance measures for each occupation. Furthermore, only observations that were not <em>recommended for suppression</em> were used (refer to page 1 in <em>Data Dictionary O*NET 22.0 Database</em> manual). Observations with missing data were removed from the dataset. The resulting dataset contained 962 occupations and 151 variables.</p>
 </div>
 <div id="k-means" class="section level2">
 <h2>K-Means</h2>
@@ -489,15 +488,260 @@ Insurance Adjusters, Examiners, and Investigators
 <div id="weighting-more-interpersonal-skill-variables" class="section level2">
 <h2>Weighting More Interpersonal Skill Variables</h2>
 <p>The related jobs shown in the previous sections were the result of distances calculated from unweighted variables. That is, all KSAOs were considered equal to each other. Weighting certain interpersonal interaction variables may help create a revised list where certain social abilities are given more emphasis in the distance calculation.</p>
-<div id="weighted.jobs-function" class="section level3">
-<h3><code>weighted.jobs</code> function</h3>
-<p>The function <code>weighted.jobs</code> is designed to return a dataframe consisting of O*NET SOC Codes, job titles, and the distances from the job specified in the <code>job_title</code> argument. The function takes four arguments:</p>
+<p>Nine different qualities were selected for weighting based upon researcher knowledge of the company-specific FA role:</p>
 <ul>
-<li><code>dataset</code>: a dataframe of</li>
-<li><code>job_title</code>: a character vector of the job title in the dataframe</li>
-<li><code>wgts.vars</code>:</li>
+<li>Relationships</li>
+<li>Concern for others</li>
+<li>Social orientation</li>
+<li>Social</li>
+<li>Persuasion</li>
+<li>Active listening</li>
+<li>Service orientation</li>
+<li>Sales and marketing</li>
+<li>Customer and personal service</li>
 </ul>
+The above qualities were weighted by a factor of two (2). This seemed to create a list that removed more analyst-based roles and used roles with greater “people skill” involvement.
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+o_net_soc_code
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:right;">
+distance
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+13-2052.00
+</td>
+<td style="text-align:left;">
+Personal Financial Advisors
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41-3031.01
+</td>
+<td style="text-align:left;">
+Sales Agents, Securities and Commodities
+</td>
+<td style="text-align:right;">
+6.912361
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41-3031.02
+</td>
+<td style="text-align:left;">
+Sales Agents, Financial Services
+</td>
+<td style="text-align:right;">
+8.684127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41-3021.00
+</td>
+<td style="text-align:left;">
+Insurance Sales Agents
+</td>
+<td style="text-align:right;">
+8.789863
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-3031.02
+</td>
+<td style="text-align:left;">
+Financial Managers, Branch or Department
+</td>
+<td style="text-align:right;">
+9.163548
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2011.02
+</td>
+<td style="text-align:left;">
+Auditors
+</td>
+<td style="text-align:right;">
+9.312922
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2072.00
+</td>
+<td style="text-align:left;">
+Loan Officers
+</td>
+<td style="text-align:right;">
+9.323636
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-1131.00
+</td>
+<td style="text-align:left;">
+Fundraisers
+</td>
+<td style="text-align:right;">
+9.417930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-9199.03
+</td>
+<td style="text-align:left;">
+Investment Fund Managers
+</td>
+<td style="text-align:right;">
+9.840284
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-2031.00
+</td>
+<td style="text-align:left;">
+Public Relations and Fundraising Managers
+</td>
+<td style="text-align:right;">
+9.864392
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2071.01
+</td>
+<td style="text-align:left;">
+Loan Counselors
+</td>
+<td style="text-align:right;">
+9.971787
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41-1012.00
+</td>
+<td style="text-align:left;">
+First-Line Supervisors of Non-Retail Sales Workers
+</td>
+<td style="text-align:right;">
+10.100777
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2071.00
+</td>
+<td style="text-align:left;">
+Credit Counselors
+</td>
+<td style="text-align:right;">
+10.164348
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-1141.00
+</td>
+<td style="text-align:left;">
+Compensation, Benefits, and Job Analysis Specialists
+</td>
+<td style="text-align:right;">
+10.232354
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2099.02
+</td>
+<td style="text-align:left;">
+Risk Management Specialists
+</td>
+<td style="text-align:right;">
+10.382392
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11-2022.00
+</td>
+<td style="text-align:left;">
+Sales Managers
+</td>
+<td style="text-align:right;">
+10.420375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-2081.00
+</td>
+<td style="text-align:left;">
+Tax Examiners and Collectors, and Revenue Agents
+</td>
+<td style="text-align:right;">
+10.463238
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-1111.00
+</td>
+<td style="text-align:left;">
+Management Analysts
+</td>
+<td style="text-align:right;">
+10.467950
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41-3099.01
+</td>
+<td style="text-align:left;">
+Energy Brokers
+</td>
+<td style="text-align:right;">
+10.510535
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13-1161.00
+</td>
+<td style="text-align:left;">
+Market Research Analysts and Marketing Specialists
+</td>
+<td style="text-align:right;">
+10.541980
+</td>
+</tr>
+</tbody>
+</table>
 </div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This analysis provided potential occupations similar to financial advisors through finding commonalities in knowledge, skills, abilities, work values, work styles, and interests. K-means clustering, unweighted euclidean distances, and weighted euclidean distances were used to find similar occupations. The weighted distance analysis was selected for stakeholder presentation as the occupations overlapped with prior information while providing novel occupations to consider. Future research should test the validity of these selected jobs in predicting FA performance.</p>
 </div>
 </div>
 
@@ -512,6 +756,7 @@ Insurance Adjusters, Examiners, and Investigators
         <li><a href="#k-means">K-Means</a></li>
         <li><a href="#occupations-closest-to-financial-advisor">Occupations Closest to Financial Advisor</a></li>
         <li><a href="#weighting-more-interpersonal-skill-variables">Weighting More Interpersonal Skill Variables</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
         </ul>
       </div>
     </div>
