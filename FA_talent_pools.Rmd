@@ -1,6 +1,6 @@
 ---
 title: "Financial Advisor Talent Pools"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output: 
   rmdformats::html_clean:
     highlight: kate
@@ -53,7 +53,14 @@ O\*NET stores various data on occupational definitions that helps people underst
 - Work Styles
 - Interests
 
-The data used in this analysis were the importance measures for each occupation. Furthermore, only observations that were not *recommended for suppression* were used (refer to page 1 in *Data Dictionary O\*NET 22.0 Database* manual). Observations with missing data were removed from the dataset. The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. 
+### Data Preprocessing
+*Knowledge, skills, abilities, work styles.* The data from the knowledge, skills, abilities, and work styles were preprocessed in a similar fashion. The importance measures for each dataset were used (`scale_id == 'IM'`). Observations that were recommended for suppression (`recommend_suppress`) or not relevant (`not_relevant`) were removed from the dataset.  
+
+*Work values*. The work values data used the *mean extent rating* for each work value.  
+
+*Interests*. The interests data used the RIASEC level of each interest (`scale_id == 'OI'`).  
+
+The resulting dataset contained `r nrow(ksa)` occupations and `r ncol(ksa)` variables. Please refer to the [O*NET 22.0 Database Data Dictionary](https://www.onetcenter.org/dictionary/22.0/excel/) for more information on the data used in this analysis.  
 
 ## K-Means
 ```{r}
@@ -174,9 +181,10 @@ weighted_distances <- scaled %>%
 weighted_tbl <- weighted_distances %>% 
     select(o_net_soc_code, title, distance = X96) %>% 
     arrange(distance) %>% 
-    top_n(-20, distance) 
+    top_n(-21, distance) 
 
 weighted_tbl %>% 
+    select(title, distance) %>% 
     knitr::kable("html", title = "Occupations Similar to FA Weighted for Interpersonal Skills")
 ```
 

@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2017-10-17" />
+<meta name="date" content="2017-10-18" />
 
 <title>Financial Advisor Talent Pools</title>
 
@@ -65,7 +65,7 @@ img {
 
 <div id="header">
 <h1 class="title">Financial Advisor Talent Pools</h1>
-<h4 class="date"><em>2017-10-17</em></h4>
+<h4 class="date"><em>October 18, 2017</em></h4>
 </div>
 
 <div id="content">
@@ -84,7 +84,13 @@ img {
 <li>Work Styles</li>
 <li>Interests</li>
 </ul>
-<p>The data used in this analysis were the importance measures for each occupation. Furthermore, only observations that were not <em>recommended for suppression</em> were used (refer to page 1 in <em>Data Dictionary O*NET 22.0 Database</em> manual). Observations with missing data were removed from the dataset. The resulting dataset contained 962 occupations and 151 variables.</p>
+<div id="data-preprocessing" class="section level3">
+<h3>Data Preprocessing</h3>
+<p><em>Knowledge, skills, abilities, work styles.</em> The data from the knowledge, skills, abilities, and work styles were preprocessed in a similar fashion. The importance measures for each dataset were used (<code>scale_id == 'IM'</code>). Observations that were recommended for suppression (<code>recommend_suppress</code>) or not relevant (<code>not_relevant</code>) were removed from the dataset.</p>
+<p><em>Work values</em>. The work values data used the <em>mean extent rating</em> for each work value.</p>
+<p><em>Interests</em>. The interests data used the RIASEC level of each interest (<code>scale_id == 'OI'</code>).</p>
+<p>The resulting dataset contained 962 occupations and 151 variables. Please refer to the <a href="https://www.onetcenter.org/dictionary/22.0/excel/">O*NET 22.0 Database Data Dictionary</a> for more information on the data used in this analysis.</p>
+</div>
 </div>
 <div id="k-means" class="section level2">
 <h2>K-Means</h2>
@@ -505,9 +511,6 @@ The above qualities were weighted by a factor of two (2). This seemed to create 
 <thead>
 <tr>
 <th style="text-align:left;">
-o_net_soc_code
-</th>
-<th style="text-align:left;">
 title
 </th>
 <th style="text-align:right;">
@@ -518,9 +521,6 @@ distance
 <tbody>
 <tr>
 <td style="text-align:left;">
-13-2052.00
-</td>
-<td style="text-align:left;">
 Personal Financial Advisors
 </td>
 <td style="text-align:right;">
@@ -528,9 +528,6 @@ Personal Financial Advisors
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-41-3031.01
-</td>
 <td style="text-align:left;">
 Sales Agents, Securities and Commodities
 </td>
@@ -540,9 +537,6 @@ Sales Agents, Securities and Commodities
 </tr>
 <tr>
 <td style="text-align:left;">
-41-3031.02
-</td>
-<td style="text-align:left;">
 Sales Agents, Financial Services
 </td>
 <td style="text-align:right;">
@@ -550,9 +544,6 @@ Sales Agents, Financial Services
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-41-3021.00
-</td>
 <td style="text-align:left;">
 Insurance Sales Agents
 </td>
@@ -562,9 +553,6 @@ Insurance Sales Agents
 </tr>
 <tr>
 <td style="text-align:left;">
-11-3031.02
-</td>
-<td style="text-align:left;">
 Financial Managers, Branch or Department
 </td>
 <td style="text-align:right;">
@@ -572,9 +560,6 @@ Financial Managers, Branch or Department
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-13-2011.02
-</td>
 <td style="text-align:left;">
 Auditors
 </td>
@@ -584,9 +569,6 @@ Auditors
 </tr>
 <tr>
 <td style="text-align:left;">
-13-2072.00
-</td>
-<td style="text-align:left;">
 Loan Officers
 </td>
 <td style="text-align:right;">
@@ -594,9 +576,6 @@ Loan Officers
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-13-1131.00
-</td>
 <td style="text-align:left;">
 Fundraisers
 </td>
@@ -606,9 +585,6 @@ Fundraisers
 </tr>
 <tr>
 <td style="text-align:left;">
-11-9199.03
-</td>
-<td style="text-align:left;">
 Investment Fund Managers
 </td>
 <td style="text-align:right;">
@@ -616,9 +592,6 @@ Investment Fund Managers
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-11-2031.00
-</td>
 <td style="text-align:left;">
 Public Relations and Fundraising Managers
 </td>
@@ -628,9 +601,6 @@ Public Relations and Fundraising Managers
 </tr>
 <tr>
 <td style="text-align:left;">
-13-2071.01
-</td>
-<td style="text-align:left;">
 Loan Counselors
 </td>
 <td style="text-align:right;">
@@ -638,9 +608,6 @@ Loan Counselors
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-41-1012.00
-</td>
 <td style="text-align:left;">
 First-Line Supervisors of Non-Retail Sales Workers
 </td>
@@ -650,9 +617,6 @@ First-Line Supervisors of Non-Retail Sales Workers
 </tr>
 <tr>
 <td style="text-align:left;">
-13-2071.00
-</td>
-<td style="text-align:left;">
 Credit Counselors
 </td>
 <td style="text-align:right;">
@@ -660,9 +624,6 @@ Credit Counselors
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-13-1141.00
-</td>
 <td style="text-align:left;">
 Compensation, Benefits, and Job Analysis Specialists
 </td>
@@ -672,9 +633,6 @@ Compensation, Benefits, and Job Analysis Specialists
 </tr>
 <tr>
 <td style="text-align:left;">
-13-2099.02
-</td>
-<td style="text-align:left;">
 Risk Management Specialists
 </td>
 <td style="text-align:right;">
@@ -682,9 +640,6 @@ Risk Management Specialists
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-11-2022.00
-</td>
 <td style="text-align:left;">
 Sales Managers
 </td>
@@ -694,9 +649,6 @@ Sales Managers
 </tr>
 <tr>
 <td style="text-align:left;">
-13-2081.00
-</td>
-<td style="text-align:left;">
 Tax Examiners and Collectors, and Revenue Agents
 </td>
 <td style="text-align:right;">
@@ -704,9 +656,6 @@ Tax Examiners and Collectors, and Revenue Agents
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
-13-1111.00
-</td>
 <td style="text-align:left;">
 Management Analysts
 </td>
@@ -716,9 +665,6 @@ Management Analysts
 </tr>
 <tr>
 <td style="text-align:left;">
-41-3099.01
-</td>
-<td style="text-align:left;">
 Energy Brokers
 </td>
 <td style="text-align:right;">
@@ -727,13 +673,18 @@ Energy Brokers
 </tr>
 <tr>
 <td style="text-align:left;">
-13-1161.00
-</td>
-<td style="text-align:left;">
 Market Research Analysts and Marketing Specialists
 </td>
 <td style="text-align:right;">
 10.541980
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Survey Researchers
+</td>
+<td style="text-align:right;">
+10.552109
 </td>
 </tr>
 </tbody>
